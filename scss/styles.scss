@@ -1,0 +1,11 @@
+#activity {
+    // I moved as much as possible to JS (which is horribly bloated and inefficient anyway), but this had to stay.
+    .y-axis {
+        line {
+            opacity: .2;
+        }
+        path {
+            display: none;
+        }
+    }
+}
