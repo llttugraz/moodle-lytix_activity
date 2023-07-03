@@ -21,7 +21,7 @@
  * @category   test
  * @author     Günther Moser <moser@tugraz.at>
  * @author     Viktoria Wieser <viktoria.wieser@tugraz.at>
- * @copyright  2021 Educational Technologies, Graz, University of Technology
+ * @copyright  2023 Educational Technologies, Graz, University of Technology
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -95,9 +95,9 @@ class activities_cache_test extends advanced_testcase {
         foreach ($students as $student) {
             if ($student->id) {
 
-                $date = new \DateTime('5 months ago');
+                $date = new \DateTime('90 days ago');
                 date_add($date, date_interval_create_from_date_string('6 hours'));
-                $today = new \DateTime('today midnight');
+                $today = new \DateTime('tomorrow');
                 date_add($today, date_interval_create_from_date_string('6 hours'));
 
                 dummy::create_fake_data_for_course($date, $today, $student, $this->course->id, $context);
@@ -159,7 +159,7 @@ class activities_cache_test extends advanced_testcase {
                 $logstore->courseid  = $courseid;
                 $logstore->target = "course";
                 $logstore->action = "viewed";
-                $logstore->timecreated = $semstart->getTimestamp();
+                $logstore->timecreated = $semstart;
                 $logstore->edulevel = 2;
                 $logstore->contextid = $context->id;
                 $logstore->contextlevel = 50;
@@ -188,8 +188,8 @@ class activities_cache_test extends advanced_testcase {
     public function test_case_1() {
         $today = new \DateTime('today');
         $today->setTime(0, 0);
-        $in5months = new \DateTime('5 months');
-        $this->setup_semester($today, $in5months);
+        $inthreemonths = new \DateTime('90 days');
+        $this->setup_semester($today, $inthreemonths);
 
         $this->execute_task();
         $today = new \DateTime('today');
@@ -244,12 +244,11 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_2() {
-        $fivemonthsago = new \DateTime('5 months ago');
-        $fivemonthsago->setTime(0, 0);
-        $tomorrow = new \DateTime('today midnight');
-        date_add($tomorrow, date_interval_create_from_date_string('1 day'));
+        $threemonthsago = new \DateTime('90 days ago');
+        $threemonthsago->setTime(0, 0);
+        $tomorrow = new \DateTime('tomorrow');
 
-        $this->setup_semester($fivemonthsago, $tomorrow);
+        $this->setup_semester($threemonthsago, $tomorrow);
 
         $students = [];
         for ($i = 0; $i < 50; $i++) {
@@ -257,16 +256,16 @@ class activities_cache_test extends advanced_testcase {
         }
 
         $this->fill_activities($students);
-        date_add($fivemonthsago, date_interval_create_from_date_string('1 day'));
-        $this->fake_standard_logstore_entries($students, $this->course->id, $fivemonthsago);
-        date_sub($fivemonthsago, date_interval_create_from_date_string('1 day'));
+        date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
+        $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
+        date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
 
         $this->execute_task();
 
         $result = $this->execute($students[0]->id);
 
         $today    = new \DateTime('today');
-        $interval = $fivemonthsago->diff($today);
+        $interval = $threemonthsago->diff($today);
 
         self::assertEquals(3, count($result));
         self::assertEquals($interval->format('%a'), count($result['data']));
@@ -302,13 +301,11 @@ class activities_cache_test extends advanced_testcase {
     public function test_case_3() {
         global $DB;
 
-        $fivemonthsago = new \DateTime('5 months ago');
-        $fivemonthsago->setTime(0, 0);
+        $threemonthsago = new \DateTime('90 days ago');
+        $threemonthsago->setTime(0, 0);
+        $tomorrow = new \DateTime('tomorrow');
 
-        $tomorrow = new \DateTime('today midnight');
-        date_add($tomorrow, date_interval_create_from_date_string('1 day'));
-
-        $this->setup_semester($fivemonthsago, $tomorrow);
+        $this->setup_semester($threemonthsago, $tomorrow);
 
         $students = [];
         for ($i = 0; $i < 50; $i++) {
@@ -316,12 +313,12 @@ class activities_cache_test extends advanced_testcase {
         }
 
         $this->fill_activities($students);
-        date_add($fivemonthsago, date_interval_create_from_date_string('1 day'));
-        $this->fake_standard_logstore_entries($students, $this->course->id, $fivemonthsago);
-        date_sub($fivemonthsago, date_interval_create_from_date_string('1 day'));
+        date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
+        $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
+        date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
 
         // Delete first 10 days of 10 students.
-        $after10days = new \DateTime('5 months ago');
+        $after10days = new \DateTime('90 days ago');
         date_add($after10days, date_interval_create_from_date_string('10 days'));
         $whereclause = " userid = ? AND timestamp < ?";
         for ($i = 0; $i < 10; $i++) {
@@ -334,7 +331,7 @@ class activities_cache_test extends advanced_testcase {
         $result = $this->execute($students[0]->id);
 
         $today    = new \DateTime('today');
-        $interval = $fivemonthsago->diff($today);
+        $interval = $threemonthsago->diff($today);
 
         self::assertEquals(3, count($result));
         self::assertEquals($interval->format('%a'), count($result['data']));
@@ -360,13 +357,11 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_4() {
-        $fivemonthsago = new \DateTime('5 months ago');
-        $fivemonthsago->setTime(0, 0);
+        $threemonthsago = new \DateTime('90 days ago');
+        $threemonthsago->setTime(0, 0);
+        $tomorrowmidnight = new \DateTime('tomorrow');
 
-        $tomorrowmidnight = new \DateTime('today midnight');
-        date_add($tomorrowmidnight, date_interval_create_from_date_string('1 day'));
-
-        $this->setup_semester($fivemonthsago, $tomorrowmidnight);
+        $this->setup_semester($threemonthsago, $tomorrowmidnight);
 
         $context = context_course::instance($this->course->id);
 
@@ -376,9 +371,9 @@ class activities_cache_test extends advanced_testcase {
         }
 
         $this->fill_activities($students);
-        date_add($fivemonthsago, date_interval_create_from_date_string('1 day'));
-        $this->fake_standard_logstore_entries($students, $this->course->id, $fivemonthsago);
-        date_sub($fivemonthsago, date_interval_create_from_date_string('1 day'));
+        date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
+        $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
+        date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
 
         $this->execute_task();
 
@@ -424,11 +419,9 @@ class activities_cache_test extends advanced_testcase {
      * @throws \coding_exception
      */
     public function test_case_6() {
-        $semstart = new \DateTime('5 months ago');
+        $semstart = new \DateTime('90 days ago');
         $semstart->setTime(0, 0);
-
-        $semend = new \DateTime('today midnight');
-        date_add($semend, date_interval_create_from_date_string('1 day'));
+        $semend = new \DateTime('tomorrow');
 
         $this->setup_semester($semstart, $semend);
 
@@ -458,11 +451,9 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_7() {
-        $start = new \DateTime('5 months ago');
+        $start = new \DateTime('90 days ago');
         $start->setTime(0, 0);
-
-        $end = new \DateTime('today midnight');
-        date_sub($end, date_interval_create_from_date_string('2 days'));
+        $end = new \DateTime('tomorrow');
 
         $this->setup_semester($start, $end);
         $this->course->enddate = $end;
