@@ -319,7 +319,6 @@ class activity_graph_lib extends \external_api {
                         break;
                     }
                 }
-
                 $allall = self::get_average($enrolled, $all[$day]['all_core'] + $all[$day]['all_forum'] + $all[$day]['all_grade']
                     + $all[$day]['all_submission'] + $all[$day]['all_resource'] + $all[$day]['all_quiz'] + $all[$day]['all_bbb']);
                 $allcore = self::get_average($enrolled, $all[$day]['all_core']);

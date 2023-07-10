@@ -98,6 +98,7 @@ class activities_cache_test extends advanced_testcase {
                 $date = new \DateTime('90 days ago');
                 date_add($date, date_interval_create_from_date_string('6 hours'));
                 $today = new \DateTime('tomorrow');
+                $today->modify('+ 2 days');
                 date_add($today, date_interval_create_from_date_string('6 hours'));
 
                 dummy::create_fake_data_for_course($date, $today, $student, $this->course->id, $context);
@@ -316,15 +317,6 @@ class activities_cache_test extends advanced_testcase {
         date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
         $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
         date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
-
-        // Delete first 10 days of 10 students.
-        $after10days = new \DateTime('90 days ago');
-        date_add($after10days, date_interval_create_from_date_string('10 days'));
-        $whereclause = " userid = ? AND timestamp < ?";
-        for ($i = 0; $i < 10; $i++) {
-            $DB->delete_records_select('lytix_helper_dly_mdl_acty', $whereclause,
-                                       array($students[$i]->id, $after10days->getTimestamp()));
-        }
 
         $this->execute_task();
 
