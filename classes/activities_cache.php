@@ -140,61 +140,61 @@ class activities_cache implements \cache_data_source {
         } else {
             $sql = "SELECT DISTINCT dly_logs.id, dly_logs.* " .
                    "FROM {lytix_helper_dly_mdl_acty} dly_logs " .
-                   "WHERE dly_logs.courseid = :courseid AND dly_logs.timestamp >= :fetchstart AND dly_logs.timestamp <= :fetchperiod " .
+                   "WHERE dly_logs.courseid = :courseid AND dly_logs.timestamp ".
+                   ">= :fetchstart AND dly_logs.timestamp <= :fetchperiod " .
                    "ORDER BY dly_logs.timestamp ASC";
 
             while ($fetchstart->getTimestamp() < $fetchend->getTimestamp()) {
                 $fetchperiod = clone $fetchstart;
-                $fetchperiod->setTime(23,59,59);
+                $fetchperiod->setTime(23, 59, 59);
 
-                $params['courseid']  = $courseid;
+                $params['courseid'] = $courseid;
                 $params['fetchstart'] = $fetchstart->getTimestamp();
-                $params['fetchperiod']    = $fetchperiod->getTimestamp();
+                $params['fetchperiod'] = $fetchperiod->getTimestamp();
 
                 $records = $DB->get_records_sql($sql, $params);
 
                 if (count($records)) {
 
-                    $allcore       = 0;
-                    $allforum      = 0;
-                    $allgrade      = 0;
+                    $allcore = 0;
+                    $allforum = 0;
+                    $allgrade = 0;
                     $allsubmission = 0;
-                    $allresource   = 0;
-                    $allquiz       = 0;
-                    $allbbb        = 0;
+                    $allresource = 0;
+                    $allquiz = 0;
+                    $allbbb = 0;
 
                     foreach ($records as $key => $record) {
-                            $allcore       += $record->core_time;
-                            $allforum      += $record->forum_time;
-                            $allgrade      += $record->grade_time;
-                            $allsubmission += $record->submission_time;
-                            $allresource   += $record->resource_time;
-                            $allquiz       += $record->quiz_time;
-                            $allbbb        += $record->bbb_time;
-                            // Remove this element from array.
-                            //unset($records[$key]);
+                        $allcore += $record->core_time;
+                        $allforum += $record->forum_time;
+                        $allgrade += $record->grade_time;
+                        $allsubmission += $record->submission_time;
+                        $allresource += $record->resource_time;
+                        $allquiz += $record->quiz_time;
+                        $allbbb += $record->bbb_time;
                     }
                     // Write sums for this day into array.
                     $data[] = [
-                        'all_core'       => $allcore,
-                        'all_forum'      => $allforum,
-                        'all_grade'      => $allgrade,
+                        'all_core' => $allcore,
+                        'all_forum' => $allforum,
+                        'all_grade' => $allgrade,
                         'all_submission' => $allsubmission,
-                        'all_resource'   => $allresource,
-                        'all_quiz'       => $allquiz,
-                        'all_bbb'        => $allbbb,
-                        'date'           => date('Ymd', $fetchstart->getTimestamp())
+                        'all_resource' => $allresource,
+                        'all_quiz' => $allquiz,
+                        'all_bbb' => $allbbb,
+                        'date' => date('Ymd', $fetchstart->getTimestamp())
                     ];
-                } else { // No records at all for this day.
+                } else {
+                    // No records at all for this day.
                     $data[] = [
-                            'all_core'       => 0,
-                            'all_forum'      => 0,
-                            'all_grade'      => 0,
-                            'all_submission' => 0,
-                            'all_resource'   => 0,
-                            'all_quiz'       => 0,
-                            'all_bbb'        => 0,
-                            'date'           => $fetchstart->format('Ymd')
+                        'all_core' => 0,
+                        'all_forum' => 0,
+                        'all_grade' => 0,
+                        'all_submission' => 0,
+                        'all_resource' => 0,
+                        'all_quiz' => 0,
+                        'all_bbb' => 0,
+                        'date' => $fetchstart->format('Ymd')
                     ];
                 }
                 $fetchstart->modify('+1 day');

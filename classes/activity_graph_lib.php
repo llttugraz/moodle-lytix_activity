@@ -233,9 +233,8 @@ class activity_graph_lib extends \external_api {
         // Use smaller date.
         $courseend = course_settings::getcourseenddate($courseid);
 
-        $today = new \DateTime('today'); // Today at 00:00
+        $today = new \DateTime('today');
 
-        $end = null;
         if ($today->getTimestamp() < $courseend->getTimestamp()) {
             $end = clone $today;
         } else {
@@ -283,10 +282,10 @@ class activity_graph_lib extends \external_api {
         $omquiz = [];
         $omvideo = [];
 
-        if (count($records)) {// && ($start->getTimestamp() != $today->getTimestamp())) { // maybe this is the fail?
+        if (count($records)) {
             while ($start->getTimestamp() < $end->getTimestamp()) {
                 $tmpday = clone $start;
-                $tmpday->modify('+ 1 day');// = date_add($tmpday, date_interval_create_from_date_string('1 day'));
+                $tmpday->modify('+ 1 day');
 
                 $usercore = 0;
                 $userforum = 0;
