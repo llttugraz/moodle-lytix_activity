@@ -52,13 +52,33 @@ class activities_cache_test extends advanced_testcase {
      * @var null
      */
     private $course = null;
+    /**
+     * Variable for coursestart
+     * @var null
+     */
+    private $start = null;
+    /**
+     * Variable for courseend
+     * @var null
+     */
+    private $end = null;
+    /**
+     * Variable for student counts
+     * @var 0
+     */
+    private $studentcnt = 1;
 
     /**
      * Setup called before any test case.
      */
     public function setUp(): void {
-        $this->resetAfterTest(true);
+        $this->resetAfterTest();
         $this->setAdminUser();
+        $this->start = new \DateTime('30 days ago');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('tomorrow');
+        $this->end->setTime(0, 0);
+        $this->studentcnt = 30;
     }
 
     /**
@@ -95,12 +115,9 @@ class activities_cache_test extends advanced_testcase {
         foreach ($students as $student) {
             if ($student->id) {
 
-                $date = new \DateTime('90 days ago');
-                date_add($date, date_interval_create_from_date_string('6 hours'));
-                $today = new \DateTime('tomorrow');
-                $today->modify('+ 2 days');
-                date_add($today, date_interval_create_from_date_string('6 hours'));
-
+                $date = clone $this->start;
+                $date->modify('+ 8 hours');
+                $today = clone $this->end;
                 dummy::create_fake_data_for_course($date, $today, $student, $this->course->id, $context);
             }
         }
@@ -134,7 +151,8 @@ class activities_cache_test extends advanced_testcase {
         set_config('semester_start', $start->format('Y-m-d'), 'local_lytix');
         set_config('semester_end', $end->format('Y-m-d'), 'local_lytix');
         // Create course.
-        $this->course = $this->getDataGenerator()->create_course(['startdate' => $start->getTimestamp()]);
+        $this->course = $this->getDataGenerator()->create_course(
+            ['startdate' => $start->getTimestamp(), 'enddate' => $end->getTimestamp()]);
         // Add course to config list.
         set_config('course_list', $this->course->id, 'local_lytix');
         set_config('platform', 'learners_corner', 'local_lytix');
@@ -165,6 +183,7 @@ class activities_cache_test extends advanced_testcase {
                 $logstore->contextid = $context->id;
                 $logstore->contextlevel = 50;
                 $logstore->contextinstanceid = 1;
+
                 $DB->insert_record('logstore_standard_log', $logstore);
             }
         }
@@ -245,28 +264,25 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_2() {
-        $threemonthsago = new \DateTime('90 days ago');
-        $threemonthsago->setTime(0, 0);
-        $tomorrow = new \DateTime('tomorrow');
 
-        $this->setup_semester($threemonthsago, $tomorrow);
-
+        $this->setup_semester($this->start, $this->end);
         $students = [];
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < $this->studentcnt; $i++) {
             $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
         }
 
         $this->fill_activities($students);
-        date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
-        $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
-        date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
 
         $this->execute_task();
 
         $result = $this->execute($students[0]->id);
 
         $today    = new \DateTime('today');
-        $interval = $threemonthsago->diff($today);
+        $interval = $this->start->diff($today);
 
         self::assertEquals(3, count($result));
         self::assertEquals($interval->format('%a'), count($result['data']));
@@ -300,30 +316,25 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_3() {
-        global $DB;
 
-        $threemonthsago = new \DateTime('90 days ago');
-        $threemonthsago->setTime(0, 0);
-        $tomorrow = new \DateTime('tomorrow');
-
-        $this->setup_semester($threemonthsago, $tomorrow);
-
+        $this->setup_semester($this->start, $this->end);
         $students = [];
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < $this->studentcnt; $i++) {
             $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
         }
 
         $this->fill_activities($students);
-        date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
-        $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
-        date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
 
         $this->execute_task();
 
         $result = $this->execute($students[0]->id);
 
         $today    = new \DateTime('today');
-        $interval = $threemonthsago->diff($today);
+        $interval = $this->start->diff($today);
 
         self::assertEquals(3, count($result));
         self::assertEquals($interval->format('%a'), count($result['data']));
@@ -349,23 +360,21 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_4() {
-        $threemonthsago = new \DateTime('90 days ago');
-        $threemonthsago->setTime(0, 0);
-        $tomorrowmidnight = new \DateTime('tomorrow');
 
-        $this->setup_semester($threemonthsago, $tomorrowmidnight);
+        $this->setup_semester($this->start, $this->end);
 
         $context = context_course::instance($this->course->id);
 
         $students = [];
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < $this->studentcnt; $i++) {
             $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
         }
 
         $this->fill_activities($students);
-        date_add($threemonthsago, date_interval_create_from_date_string('1 day'));
-        $this->fake_standard_logstore_entries($students, $this->course->id, $threemonthsago->getTimestamp());
-        date_sub($threemonthsago, date_interval_create_from_date_string('1 day'));
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
 
         $this->execute_task();
 
@@ -411,13 +420,10 @@ class activities_cache_test extends advanced_testcase {
      * @throws \coding_exception
      */
     public function test_case_6() {
-        $semstart = new \DateTime('90 days ago');
-        $semstart->setTime(0, 0);
-        $semend = new \DateTime('tomorrow');
 
-        $this->setup_semester($semstart, $semend);
+        $this->setup_semester($this->start, $this->end);
 
-        $course2 = $this->getDataGenerator()->create_course(['startdate' => $semstart->getTimestamp()]);
+        $course2 = $this->getDataGenerator()->create_course(['startdate' => $this->start->getTimestamp()]);
         // Add course to config list.
         set_config('course_list', $course2->id, 'local_lytix');
         $courseids = array($this->course->id, $course2->id);
@@ -443,12 +449,9 @@ class activities_cache_test extends advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_case_7() {
-        $start = new \DateTime('90 days ago');
-        $start->setTime(0, 0);
-        $end = new \DateTime('tomorrow');
 
-        $this->setup_semester($start, $end);
-        $this->course->enddate = $end;
+        $this->setup_semester($this->start, $this->end);
+        $this->course->enddate = $this->end;
 
         $studentone = $this->create_enrol_student('teststudent@example.org');
 
@@ -456,5 +459,294 @@ class activities_cache_test extends advanced_testcase {
 
         $result = $this->execute($studentone->id);
         self::assertNotNull($result);
+    }
+
+    /**
+     * Tests if the course begin and end where in the past.
+     * @covers ::activity_logs_get
+     * @covers ::activity_logs_get_parameters
+     * @covers ::activity_logs_get_returns
+     * @covers ::calculate_median_times
+     * @covers \lytix_activity\activities_cache::load_activities
+     * @covers \lytix_activity\activities_cache::get_activities
+     * @covers \lytix_activity\activities_cache::load_for_cache
+     * @covers \lytix_activity\activity_helper::test_and_set_customization
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function test_case_begin_past_end_past() {
+
+        $this->start = new \DateTime('10 days ago');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('9 days ago');
+        $this->end->setTime(0, 0);
+
+        $this->studentcnt = 1;
+
+        $this->setup_semester($this->start, $this->end);
+        $students = [];
+        for ($i = 0; $i < $this->studentcnt; $i++) {
+            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
+        }
+
+        $this->fill_activities($students);
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
+
+        $this->execute_task();
+
+        $result = $this->execute($students[0]->id);
+        $interval = $this->start->diff($this->end);
+
+        self::assertEquals(3, count($result));
+        self::assertEquals($interval->format('%a'), count($result['data']));
+        self::assertEquals(0, $result['ShowOthers']);
+        self::assertEquals(7, count($result['MedianTimes']));
+    }
+
+    /**
+     * Tests if the course begin and the end was yesterday.
+     * @covers ::activity_logs_get
+     * @covers ::activity_logs_get_parameters
+     * @covers ::activity_logs_get_returns
+     * @covers ::calculate_median_times
+     * @covers \lytix_activity\activities_cache::load_activities
+     * @covers \lytix_activity\activities_cache::get_activities
+     * @covers \lytix_activity\activities_cache::load_for_cache
+     * @covers \lytix_activity\activity_helper::test_and_set_customization
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function test_case_begin_past_end_yesterday() {
+
+        $this->start = new \DateTime('3 days ago');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('1 days ago');
+        $this->end->setTime(23, 59);
+
+        $this->studentcnt = 1;
+
+        $this->setup_semester($this->start, $this->end);
+        $students = [];
+        for ($i = 0; $i < $this->studentcnt; $i++) {
+            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
+        }
+
+        $this->fill_activities($students);
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
+
+        $this->execute_task();
+
+        $result = $this->execute($students[0]->id);
+        $interval = $this->start->diff($this->end);
+
+        self::assertEquals(3, count($result));
+        self::assertEquals($interval->format('%a'), count($result['data']));
+        self::assertEquals(0, $result['ShowOthers']);
+        self::assertEquals(7, count($result['MedianTimes']));
+    }
+
+    /**
+     * Tests if the course begin and the end was today at 00:00.
+     * @covers ::activity_logs_get
+     * @covers ::activity_logs_get_parameters
+     * @covers ::activity_logs_get_returns
+     * @covers ::calculate_median_times
+     * @covers \lytix_activity\activities_cache::load_activities
+     * @covers \lytix_activity\activities_cache::get_activities
+     * @covers \lytix_activity\activities_cache::load_for_cache
+     * @covers \lytix_activity\activity_helper::test_and_set_customization
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function test_case_begin_past_end_yesterday_midnight() {
+
+        $this->start = new \DateTime('3 days ago');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('today');
+
+        $this->studentcnt = 1;
+
+        $this->setup_semester($this->start, $this->end);
+        $students = [];
+        for ($i = 0; $i < $this->studentcnt; $i++) {
+            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
+        }
+
+        $this->fill_activities($students);
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
+
+        $this->execute_task();
+
+        $result = $this->execute($students[0]->id);
+        $interval = $this->start->diff($this->end);
+
+        self::assertEquals(3, count($result));
+        self::assertEquals($interval->format('%a'), count($result['data']));
+        self::assertEquals(0, $result['ShowOthers']);
+        self::assertEquals(7, count($result['MedianTimes']));
+    }
+
+    /**
+     * Tests if the course begin and the end is today at 23:59.
+     * @covers ::activity_logs_get
+     * @covers ::activity_logs_get_parameters
+     * @covers ::activity_logs_get_returns
+     * @covers ::calculate_median_times
+     * @covers \lytix_activity\activities_cache::load_activities
+     * @covers \lytix_activity\activities_cache::get_activities
+     * @covers \lytix_activity\activities_cache::load_for_cache
+     * @covers \lytix_activity\activity_helper::test_and_set_customization
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function test_case_begin_past_end_today_midnight() {
+
+        $this->start = new \DateTime('3 days ago');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('today');
+        $this->end->setTime(23, 59);
+
+        $this->studentcnt = 1;
+
+        $this->setup_semester($this->start, $this->end);
+        $students = [];
+        for ($i = 0; $i < $this->studentcnt; $i++) {
+            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
+        }
+
+        $this->fill_activities($students);
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
+
+        $this->execute_task();
+
+        $result = $this->execute($students[0]->id);
+        $interval = $this->start->diff($this->end);
+
+        self::assertEquals(3, count($result));
+        self::assertEquals($interval->format('%a'), count($result['data']));
+        self::assertEquals(0, $result['ShowOthers']);
+        self::assertEquals(7, count($result['MedianTimes']));
+    }
+
+    /**
+     * Tests if the course begin and the end is tomorrow at 23:59.
+     * @covers ::activity_logs_get
+     * @covers ::activity_logs_get_parameters
+     * @covers ::activity_logs_get_returns
+     * @covers ::calculate_median_times
+     * @covers \lytix_activity\activities_cache::load_activities
+     * @covers \lytix_activity\activities_cache::get_activities
+     * @covers \lytix_activity\activities_cache::load_for_cache
+     * @covers \lytix_activity\activity_helper::test_and_set_customization
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function test_case_begin_past_end_tomorrow_midnight() {
+
+        $this->start = new \DateTime('3 days ago');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('tomorrow');
+        $this->end->setTime(23, 59);
+
+        $this->studentcnt = 1;
+
+        $this->setup_semester($this->start, $this->end);
+        $students = [];
+        for ($i = 0; $i < $this->studentcnt; $i++) {
+            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
+        }
+
+        $this->fill_activities($students);
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
+
+        $this->execute_task();
+
+        $result = $this->execute($students[0]->id);
+        $today    = new \DateTime('today');
+        $interval = $this->start->diff($today);
+
+        self::assertEquals(3, count($result));
+        self::assertEquals($interval->format('%a'), count($result['data']));
+        self::assertEquals(0, $result['ShowOthers']);
+        self::assertEquals(7, count($result['MedianTimes']));
+    }
+
+    /**
+     * Tests if the course begin and the end is in the future.
+     * @covers ::activity_logs_get
+     * @covers ::activity_logs_get_parameters
+     * @covers ::activity_logs_get_returns
+     * @covers ::calculate_median_times
+     * @covers \lytix_activity\activities_cache::load_activities
+     * @covers \lytix_activity\activities_cache::get_activities
+     * @covers \lytix_activity\activities_cache::load_for_cache
+     * @covers \lytix_activity\activity_helper::test_and_set_customization
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function test_case_begin_future_end_future() {
+
+        $this->start = new \DateTime('tomorrow');
+        $this->start->setTime(0, 0);
+        $this->end = new \DateTime('tomorrow');
+        $this->end->modify('+1 day');
+        $this->end->setTime(00, 00);
+
+        $this->studentcnt = 1;
+
+        $this->setup_semester($this->start, $this->end);
+        $students = [];
+        for ($i = 0; $i < $this->studentcnt; $i++) {
+            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
+        }
+
+        $this->fill_activities($students);
+
+        $login = clone $this->start;
+        $login->modify('+ 7 hours');
+        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
+
+        $this->execute_task();
+
+        $result = $this->execute($students[0]->id);
+        $interval = $this->start->diff($this->end);
+
+        self::assertEquals(3, count($result));
+        self::assertEquals($interval->format('%a'), count($result['data']));
+        self::assertEquals(0, $result['ShowOthers']);
+        self::assertEquals(7, count($result['MedianTimes']));
     }
 }

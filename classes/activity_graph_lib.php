@@ -229,20 +229,18 @@ class activity_graph_lib extends \external_api {
         $coursecontext = context_course::instance($courseid);
 
         $start = course_settings::getcoursestartdate($courseid);
-        date_add($start, date_interval_create_from_date_string('2 hours'));
 
         // Use smaller date.
         $courseend = course_settings::getcourseenddate($courseid);
 
-        $today = new \DateTime('today midnight');
+        $today = new \DateTime('today'); // Today at 00:00
 
         $end = null;
         if ($today->getTimestamp() < $courseend->getTimestamp()) {
-            $end = $today;
+            $end = clone $today;
         } else {
-            $end = $courseend;
+            $end = clone $courseend;
         }
-        date_add($end, date_interval_create_from_date_string('2 hours'));
 
         $data = [];
 
@@ -257,13 +255,7 @@ class activity_graph_lib extends \external_api {
             WHERE logs.courseid = :courseid AND logs.contextid = :contextid AND logs.userid = :userid
             AND logs.timestamp >= :semstart AND logs.timestamp <= :today ORDER BY logs.core_time ASC";
 
-        // Remove low 30% inactive records.
         $records = $DB->get_records_sql($sql, $params);
-        $offset = (int)floor(count($records) / 3);
-        $records = array_slice($records, $offset);
-
-        $tmpday = new \DateTime(get_config('local_lytix', 'semester_start'));
-        date_add($tmpday, date_interval_create_from_date_string('2 hours'));
 
         // Get all enrolled users.
         $studentrole = $DB->get_record('role', ['shortname' => 'student']);
@@ -291,10 +283,11 @@ class activity_graph_lib extends \external_api {
         $omquiz = [];
         $omvideo = [];
 
-        if (count($records) && ($start->getTimestamp() != $today->getTimestamp())) {
-            while ($start->getTimestamp() < $today->getTimestamp()) {
-                date_add($tmpday, date_interval_create_from_date_string('1 day'));
-                // Reset user times for a new day.
+        if (count($records)) {// && ($start->getTimestamp() != $today->getTimestamp())) { // maybe this is the fail?
+            while ($start->getTimestamp() < $end->getTimestamp()) {
+                $tmpday = clone $start;
+                $tmpday->modify('+ 1 day');// = date_add($tmpday, date_interval_create_from_date_string('1 day'));
+
                 $usercore = 0;
                 $userforum = 0;
                 $usergrade = 0;
@@ -305,7 +298,7 @@ class activity_graph_lib extends \external_api {
 
                 // Iterate true each record on this day = users times.
                 foreach ($records as $key => $record) {
-                    if ($record->timestamp >= $start->getTimestamp() && $record->timestamp < $tmpday->getTimestamp()) {
+                    if ($record->timestamp >= $start->getTimestamp() && $record->timestamp <= $tmpday->getTimestamp()) {
                         // Aggregate specific times for current user.
                         $usercore  += $record->core_time;
                         $userforum += $record->forum_time;

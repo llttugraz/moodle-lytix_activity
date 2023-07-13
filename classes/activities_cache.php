@@ -107,28 +107,24 @@ class activities_cache implements \cache_data_source {
         global $DB;
 
         // Use bigger date.
-        $date = (new \DateTime())->setTimestamp(notification_settings::getcoursestartdate(($courseid)));
-        $date->setTime(0, 0);
-        $date->modify('+2 hours');
-        $semstart = (new \DateTime())->setTimestamp($date->getTimestamp());
+        $fetchstart = (new \DateTime())->setTimestamp(notification_settings::getcoursestartdate(($courseid)));
+        $fetchstart->setTime(0, 0);
 
-        $today = new \DateTime('today midnight');
+        $fetchend = new \DateTime('today');
         $end   = (new \DateTime())->setTimestamp(notification_settings::getcourseenddate(($courseid)));
-        if ($end->getTimestamp() < $today->getTimestamp()) {
-            $today = $end;
-            $today->setTime(0, 0);
+        if ($end->getTimestamp() < $fetchend->getTimestamp()) {
+            $fetchend = $end;
+            $fetchend->setTime(0, 0);
         }
-        $today->modify('+2 hours');
 
         $data = [];
 
         $params1['courseid']  = $courseid;
-        $params1['semstart2'] = $semstart->getTimestamp();
-        $params1['today2']    = $today->getTimestamp();
+        $params1['fetchstart'] = $fetchstart->getTimestamp();
+        $params1['fetchend']    = $fetchend->getTimestamp();
 
-        // Check if course was viewed by anyone between semesterstart and today.
         $sqlviews = "SELECT * FROM {lytix_helper_dly_mdl_acty} " .
-                    "WHERE courseid = :courseid AND timestamp >= :semstart2 AND timestamp <= :today2";
+                    "WHERE courseid = :courseid AND timestamp >= :fetchstart AND timestamp <= :fetchend";
 
         if (!$DB->record_exists_sql($sqlviews, $params1)) {
             $data[] = [
@@ -139,33 +135,26 @@ class activities_cache implements \cache_data_source {
                     'all_resource'   => 0,
                     'all_quiz'       => 0,
                     'all_bbb'        => 0,
-                    'date'           => $date->format('Ymd')
+                    'date'           => $fetchstart->format('Ymd')
             ];
         } else {
             $sql = "SELECT DISTINCT dly_logs.id, dly_logs.* " .
                    "FROM {lytix_helper_dly_mdl_acty} dly_logs " .
-                   "WHERE dly_logs.courseid = :courseid AND dly_logs.timestamp >= :semstart1 AND dly_logs.timestamp <= :today1 " .
-                   "ORDER BY dly_logs.core_time ASC";
+                   "WHERE dly_logs.courseid = :courseid AND dly_logs.timestamp >= :fetchstart AND dly_logs.timestamp <= :fetchperiod " .
+                   "ORDER BY dly_logs.timestamp ASC";
 
-            while ($date->getTimestamp() <= $today->getTimestamp()) {
-                $tmpday = (new \DateTime())->setTimestamp($date->getTimestamp());
-                $tmpday->modify('+1 week');
+            while ($fetchstart->getTimestamp() < $fetchend->getTimestamp()) {
+                $fetchperiod = clone $fetchstart;
+                $fetchperiod->setTime(23,59,59);
 
                 $params['courseid']  = $courseid;
-                $params['semstart1'] = $date->getTimestamp();
-                $params['today1']    = $tmpday->getTimestamp();
+                $params['fetchstart'] = $fetchstart->getTimestamp();
+                $params['fetchperiod']    = $fetchperiod->getTimestamp();
 
-                // Remove low 30% inactive records.
                 $records = $DB->get_records_sql($sql, $params);
-                $offset  = (int) floor(count($records) / 3);
-                $records = array_slice($records, $offset);
 
                 if (count($records)) {
-                    usort($records, function($item1, $item2) {
-                        return $item1->timestamp <=> $item2->timestamp;
-                    });
 
-                    // Reset all users times for a new day.
                     $allcore       = 0;
                     $allforum      = 0;
                     $allgrade      = 0;
@@ -174,10 +163,7 @@ class activities_cache implements \cache_data_source {
                     $allquiz       = 0;
                     $allbbb        = 0;
 
-                    $lasttimestamp = -1;
-                    // Iterate true each record on this day = users times.
                     foreach ($records as $key => $record) {
-                        if ($lasttimestamp == -1 || $lasttimestamp == $record->timestamp) {
                             $allcore       += $record->core_time;
                             $allforum      += $record->forum_time;
                             $allgrade      += $record->grade_time;
@@ -186,32 +172,20 @@ class activities_cache implements \cache_data_source {
                             $allquiz       += $record->quiz_time;
                             $allbbb        += $record->bbb_time;
                             // Remove this element from array.
-                            unset($records[$key]);
-                        } else {
-                            $data[] = [
-                                    'all_core'       => $allcore,
-                                    'all_forum'      => $allforum,
-                                    'all_grade'      => $allgrade,
-                                    'all_submission' => $allsubmission,
-                                    'all_resource'   => $allresource,
-                                    'all_quiz'       => $allquiz,
-                                    'all_bbb'        => $allbbb,
-                                    'date'           => date('Ymd', $record->timestamp)
-                            ];
-
-                            // Reset all users times for a new day.
-                            $allcore       = 0;
-                            $allforum      = 0;
-                            $allgrade      = 0;
-                            $allsubmission = 0;
-                            $allresource   = 0;
-                            $allquiz       = 0;
-                            $allbbb        = 0;
-                        }
-
-                        $lasttimestamp = $record->timestamp;
+                            //unset($records[$key]);
                     }
-                } else {
+                    // Write sums for this day into array.
+                    $data[] = [
+                        'all_core'       => $allcore,
+                        'all_forum'      => $allforum,
+                        'all_grade'      => $allgrade,
+                        'all_submission' => $allsubmission,
+                        'all_resource'   => $allresource,
+                        'all_quiz'       => $allquiz,
+                        'all_bbb'        => $allbbb,
+                        'date'           => date('Ymd', $fetchstart->getTimestamp())
+                    ];
+                } else { // No records at all for this day.
                     $data[] = [
                             'all_core'       => 0,
                             'all_forum'      => 0,
@@ -220,10 +194,10 @@ class activities_cache implements \cache_data_source {
                             'all_resource'   => 0,
                             'all_quiz'       => 0,
                             'all_bbb'        => 0,
-                            'date'           => $date->format('Ymd')
+                            'date'           => $fetchstart->format('Ymd')
                     ];
                 }
-                $date->modify('+1 week');
+                $fetchstart->modify('+1 day');
             }
         }
         return $data;
