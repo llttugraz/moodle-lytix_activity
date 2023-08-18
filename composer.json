@@ -21,10 +21,10 @@
     "require": {
         "moodle/moodle": "3.11 - 4.1",
         "llttugraz/moodle-local_lytix": "*",
-        "llttugraz/moodle-lytix_logs": "*",
-        "llttugraz/moodle-lytix_helper": "*",
-        "llttugraz/moodle-lytix_config": "*",
-        "llttugraz/moodle-lytix_planner": "*",
-        "llttugraz/moodle-lytix_timeoverview": "*"
+        "llttugraz/lytix_logs": "*",
+        "llttugraz/lytix_helper": "*",
+        "llttugraz/lytix_config": "*",
+        "llttugraz/lytix_planner": "*",
+        "llttugraz/lytix_timeoverview": "*"
     }
 }
