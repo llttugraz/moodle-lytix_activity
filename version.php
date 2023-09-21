@@ -19,13 +19,13 @@
  *
  * @package    lytix_activity
  * @author     Günther Moser <moser@tugraz.at>
- * @copyright  2021 Educational Technologies, Graz, University of Technology
+ * @copyright  2023 Educational Technologies, Graz, University of Technology
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version      = 2022092100; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version      = 2023092100; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->requires     = 2021051700; // Requires this Moodle version 3.11.
 $plugin->component    = 'lytix_activity'; // Full name of the plugin.
@@ -37,4 +37,4 @@ $plugin->dependencies = [
     'lytix_timeoverview'    => ANY_VERSION
 ];
 $plugin->release   = 'v1.0.5';
-$plugin->supported = [311, 401];
+$plugin->supported = [401, 401];

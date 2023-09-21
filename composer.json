@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "moodle/moodle": "3.11 - 4.1",
+        "moodle/moodle": "4.1",
         "llttugraz/moodle-local_lytix": "*",
         "llttugraz-lytix/moodle-lytix_logs": "*",
         "llttugraz-lytix/moodle-lytix_helper": "*",
