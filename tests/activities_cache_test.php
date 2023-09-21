@@ -38,9 +38,6 @@ use lytix_helper\dummy;
 use stdClass;
 use cache_definition;
 
-global $CFG;
-require_once($CFG->dirroot . '/lib/externallib.php');
-
 /**
  * Class activities_cache_test
  * @group learners_corner
