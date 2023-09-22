@@ -36,6 +36,9 @@ use lytix_helper\dummy;
 use stdClass;
 use cache_definition;
 
+global $CFG;
+require_once($CFG->dirroot . '/lib/externallib.php');
+
 /**
  * Class activities_cache_test
  * @group learners_corner
@@ -186,6 +189,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests the cache data after one day, where no entries should exist yet.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -244,6 +248,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests the cache data if data exists.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -296,6 +301,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests the cache data if users joined later.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -337,6 +343,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests the "ShowOthers" Button.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -396,6 +403,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests the cache instance.
+     * @runInSeparateProcess
      * @covers \lytix_activity\activities_cache::get_instance_for_cache
      * @throws \coding_exception
      * @throws \dml_exception
@@ -410,6 +418,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests the get_many function of cache.
+     * @runInSeparateProcess
      * @covers \lytix_activity\activities_cache::load_many_for_cache
      * @return void
      * @throws \coding_exception
@@ -428,6 +437,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if today's date is taken when the course_end/semester_end is smaller.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -458,6 +468,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if the course begin and end where in the past.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -506,6 +517,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if the course begin and the end was yesterday.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -554,6 +566,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if the course begin and the end was today at 00:00.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -601,6 +614,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if the course begin and the end is today at 23:59.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -649,6 +663,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if the course begin and the end is tomorrow at 23:59.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
@@ -698,6 +713,7 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Tests if the course begin and the end is in the future.
+     * @runInSeparateProcess
      * @covers ::activity_logs_get
      * @covers ::activity_logs_get_parameters
      * @covers ::activity_logs_get_returns
