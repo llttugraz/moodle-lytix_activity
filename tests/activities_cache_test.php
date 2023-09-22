@@ -27,6 +27,8 @@
 
 namespace lytix_activity;
 
+defined('MOODLE_INTERNAL') || die();
+
 use advanced_testcase;
 use cache_store;
 use context_course;
