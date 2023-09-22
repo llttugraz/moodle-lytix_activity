@@ -45,6 +45,7 @@ require_once($CFG->dirroot . '/lib/externallib.php');
  * Class activities_cache_test
  * @group learners_corner
  * @coversDefaultClass \lytix_activity\activity_graph_lib
+ * @runTestsInSeparateProcesses
  */
 class activities_cache_test extends advanced_testcase {
     /**
@@ -267,29 +268,7 @@ class activities_cache_test extends advanced_testcase {
      */
     public function test_case_2() {
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-
-        $today    = new \DateTime('today');
-        $interval = $this->start->diff($today);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
-        self::assertEquals(0, $result['ShowOthers']);
-        self::assertEquals(7, count($result['MedianTimes']));
+        list($students, $result) = $this->configure_course();
 
         // Show Others.
         activity_helper::test_and_set_customization($this->course->id, $students[0]->id, false, 1);
@@ -494,27 +473,7 @@ class activities_cache_test extends advanced_testcase {
 
         $this->studentcnt = 1;
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-        $interval = $this->start->diff($this->end);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
-        self::assertEquals(0, $result['ShowOthers']);
-        self::assertEquals(7, count($result['MedianTimes']));
+        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
@@ -543,27 +502,7 @@ class activities_cache_test extends advanced_testcase {
 
         $this->studentcnt = 1;
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-        $interval = $this->start->diff($this->end);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
-        self::assertEquals(0, $result['ShowOthers']);
-        self::assertEquals(7, count($result['MedianTimes']));
+        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
@@ -591,27 +530,7 @@ class activities_cache_test extends advanced_testcase {
 
         $this->studentcnt = 1;
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-        $interval = $this->start->diff($this->end);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
-        self::assertEquals(0, $result['ShowOthers']);
-        self::assertEquals(7, count($result['MedianTimes']));
+        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
@@ -640,27 +559,7 @@ class activities_cache_test extends advanced_testcase {
 
         $this->studentcnt = 1;
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-        $interval = $this->start->diff($this->end);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
-        self::assertEquals(0, $result['ShowOthers']);
-        self::assertEquals(7, count($result['MedianTimes']));
+        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
@@ -689,28 +588,7 @@ class activities_cache_test extends advanced_testcase {
 
         $this->studentcnt = 1;
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-        $today    = new \DateTime('today');
-        $interval = $this->start->diff($today);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
-        self::assertEquals(0, $result['ShowOthers']);
-        self::assertEquals(7, count($result['MedianTimes']));
+        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
@@ -740,6 +618,20 @@ class activities_cache_test extends advanced_testcase {
 
         $this->studentcnt = 1;
 
+        list($students, $result) = $this->configure_and_test_semster();
+    }
+
+    /**
+     * Test configure course.
+     *
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \restricted_context_exception
+     */
+    public function configure_and_test_semster(): array
+    {
         $this->setup_semester($this->start, $this->end);
         $students = [];
         for ($i = 0; $i < $this->studentcnt; $i++) {
@@ -755,11 +647,14 @@ class activities_cache_test extends advanced_testcase {
         $this->execute_task();
 
         $result = $this->execute($students[0]->id);
-        $interval = $this->start->diff($this->end);
+
+        $today = new \DateTime('today');
+        $interval = $this->start->diff($today);
 
         self::assertEquals(3, count($result));
         self::assertEquals($interval->format('%a'), count($result['data']));
         self::assertEquals(0, $result['ShowOthers']);
         self::assertEquals(7, count($result['MedianTimes']));
+        return array($students, $result);
     }
 }
