@@ -299,27 +299,7 @@ class activities_cache_test extends advanced_testcase {
      */
     public function test_case_3() {
 
-        $this->setup_semester($this->start, $this->end);
-        $students = [];
-        for ($i = 0; $i < $this->studentcnt; $i++) {
-            $students[$i] = $this->create_enrol_student('teststudent' . $i . '@example.org');
-        }
-
-        $this->fill_activities($students);
-
-        $login = clone $this->start;
-        $login->modify('+ 7 hours');
-        $this->fake_standard_logstore_entries($students, $this->course->id, $login->getTimestamp());
-
-        $this->execute_task();
-
-        $result = $this->execute($students[0]->id);
-
-        $today    = new \DateTime('today');
-        $interval = $this->start->diff($today);
-
-        self::assertEquals(3, count($result));
-        self::assertEquals($interval->format('%a'), count($result['data']));
+        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
