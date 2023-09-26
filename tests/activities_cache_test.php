@@ -71,8 +71,10 @@ class activities_cache_test extends advanced_testcase {
 
     /**
      * Setup called before any test case.
+     * @runInSeparateProcess
      */
     public function setUp(): void {
+        $this->setRunTestInSeparateProcess(true);
         $this->resetAfterTest();
         $this->setAdminUser();
         $this->start = new \DateTime('30 days ago');
@@ -610,8 +612,7 @@ class activities_cache_test extends advanced_testcase {
      * @throws \invalid_parameter_exception
      * @throws \restricted_context_exception
      */
-    public function configure_and_test_semster(): array
-    {
+    public function configure_and_test_semster(): array {
         $this->setup_semester($this->start, $this->end);
         $students = [];
         for ($i = 0; $i < $this->studentcnt; $i++) {
