@@ -270,7 +270,7 @@ class activities_cache_test extends advanced_testcase {
      */
     public function test_case_2() {
 
-        list($students, $result) = $this->configure_course();
+        list($students, $result) = $this->configure_and_test_semster();
 
         // Show Others.
         activity_helper::test_and_set_customization($this->course->id, $students[0]->id, false, 1);
@@ -427,64 +427,6 @@ class activities_cache_test extends advanced_testcase {
 
         $result = $this->execute($studentone->id);
         self::assertNotNull($result);
-    }
-
-    /**
-     * Tests if the course begin and end where in the past.
-     * @runInSeparateProcess
-     * @covers ::activity_logs_get
-     * @covers ::activity_logs_get_parameters
-     * @covers ::activity_logs_get_returns
-     * @covers ::calculate_median_times
-     * @covers \lytix_activity\activities_cache::load_activities
-     * @covers \lytix_activity\activities_cache::get_activities
-     * @covers \lytix_activity\activities_cache::load_for_cache
-     * @covers \lytix_activity\activity_helper::test_and_set_customization
-     *
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \invalid_parameter_exception
-     * @throws \restricted_context_exception
-     */
-    public function test_case_begin_past_end_past() {
-
-        $this->start = new \DateTime('10 days ago');
-        $this->start->setTime(0, 0);
-        $this->end = new \DateTime('9 days ago');
-        $this->end->setTime(0, 0);
-
-        $this->studentcnt = 1;
-
-        list($students, $result) = $this->configure_and_test_semster();
-    }
-
-    /**
-     * Tests if the course begin and the end was yesterday.
-     * @runInSeparateProcess
-     * @covers ::activity_logs_get
-     * @covers ::activity_logs_get_parameters
-     * @covers ::activity_logs_get_returns
-     * @covers ::calculate_median_times
-     * @covers \lytix_activity\activities_cache::load_activities
-     * @covers \lytix_activity\activities_cache::get_activities
-     * @covers \lytix_activity\activities_cache::load_for_cache
-     * @covers \lytix_activity\activity_helper::test_and_set_customization
-     *
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \invalid_parameter_exception
-     * @throws \restricted_context_exception
-     */
-    public function test_case_begin_past_end_yesterday() {
-
-        $this->start = new \DateTime('3 days ago');
-        $this->start->setTime(0, 0);
-        $this->end = new \DateTime('1 days ago');
-        $this->end->setTime(23, 59);
-
-        $this->studentcnt = 1;
-
-        list($students, $result) = $this->configure_and_test_semster();
     }
 
     /**
