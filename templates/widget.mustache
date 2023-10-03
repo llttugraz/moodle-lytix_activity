@@ -40,25 +40,25 @@
 
 <div id='activity' class='widget'>
 
-    <h3>{{#str}} title, lytix_activity {{/str}}</h3>
+    <h4>{{#str}} title, lytix_activity {{/str}}</h4>
 
     <div class='p-3'>
         <form class='d-flex justify-content-between'>
             <fieldset id='activity-chart-chooser' class='flex-shrink-1 mr-3'>
                 <label class='mb-0 mr-2'>
-                    <input id='show-bar-chart' type='radio' name='chart-type' value='bar-charts' checked/>&nbsp;{{#str}} overall_time, lytix_activity {{/str}}
+                    <input id='show-bar-chart' type='radio' name='chart-type' value='bar-charts' checked>&nbsp;{{#str}} overall_time, lytix_activity {{/str}}
                 </label>
                 <label class='mb-0'>
-                    <input id='show-line-graph' type='radio' name='chart-type' value='line-graph'/>&nbsp;{{#str}} time_per_day, lytix_activity {{/str}}
+                    <input id='show-line-graph' type='radio' name='chart-type' value='line-graph'>&nbsp;{{#str}} time_per_day, lytix_activity {{/str}}
                 </label>
             </fieldset>
             <fieldset class='flex-shrink-0 text-right custom-control custom-switch'>
-                <input id='show-others' type='checkbox' class='custom-control-input'/>
+                <input id='show-others' type='checkbox' class='custom-control-input'>
                 <label for='show-others' class='custom-control-label'>{{#str}} show_others, lytix_activity {{/str}}</label>
             </fieldset>
         </form>
 
-        <hr/>
+        <hr>
 
         <div id='activity-line-graph' class='d-none'>
             <p>
