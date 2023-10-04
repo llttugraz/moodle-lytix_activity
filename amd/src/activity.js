@@ -48,8 +48,7 @@ const activity = {
 
     renderGraphFail: function(ex) {
         // eslint-disable-next-line camelcase
-        var text = (activity.strings.error_text += '<p>' + ex.message + '</p>');
-        document.querySelector('#activitygraph_widget').innerHTML = text;
+        document.querySelector('#activitygraph_widget').innerHTML = (activity.strings.error_text += '<p>' + ex.message + '</p>');
     },
 
     drawLoading: function() {
