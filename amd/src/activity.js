@@ -47,9 +47,9 @@ const activity = {
     data: [],
 
     renderGraphFail: function(ex) {
-        document.querySelector('#activitygraph_widget').innerHTML =
-            // eslint-disable-next-line camelcase
-            (activity.strings.error_text += '<p>' + ex.message + '</p>');
+        // eslint-disable-next-line camelcase
+        var text = (activity.strings.error_text += '<p>' + ex.message + '</p>');
+        document.querySelector('#activitygraph_widget').innerHTML = text;
     },
 
     drawLoading: function() {
