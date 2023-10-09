@@ -34,13 +34,14 @@
      "contextid": 0,
      "courseid": 0,
      "userid": 0,
-     "isstudent": true
+     "isstudent": true,
+     "widgetheading": 3
   }
 }}
 
 <div id='activity' class='widget'>
 
-    <h4>{{#str}} title, lytix_activity {{/str}}</h4>
+    <h{{{widgetheading}}}>{{#str}} title, lytix_activity {{/str}}</h{{{widgetheading}}}>
 
     <div class='p-3'>
         <form class='d-flex justify-content-between'>
