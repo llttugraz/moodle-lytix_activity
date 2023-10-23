@@ -34,15 +34,15 @@ use lytix_helper\calculation_helper;
 use lytix_helper\course_settings;
 
 /**
- * Class activity_graph_lib
+ * Class activity_lib
  */
-class activity_graph_lib extends \external_api {
+class activity_lib extends \external_api {
 
     /**
      * Checks parameters.
      * @return \external_function_parameters
      */
-    public static function activity_logs_get_parameters() {
+    public static function activity_get_parameters() {
         return new \external_function_parameters(
             [
                 'userid' => new \external_value(PARAM_INT, 'User Id', VALUE_REQUIRED),
@@ -56,7 +56,7 @@ class activity_graph_lib extends \external_api {
      * Checks return values.
      * @return \external_single_structure
      */
-    public static function activity_logs_get_returns() {
+    public static function activity_get_returns() {
         return new \external_single_structure(
             [
                 'Times' => new \external_multiple_structure(
@@ -89,9 +89,9 @@ class activity_graph_lib extends \external_api {
      * @throws \invalid_parameter_exception
      * @throws \restricted_context_exception
      */
-    public static function activity_logs_get($userid, $courseid, $contextid) {
+    public static function activity_get($userid, $courseid, $contextid) {
 
-        $params  = self::validate_parameters(self::activity_logs_get_parameters(), [
+        $params  = self::validate_parameters(self::activity_get_parameters(), [
             'userid' => $userid,
             'courseid' => $courseid,
             'contextid' => $contextid
@@ -125,32 +125,32 @@ class activity_graph_lib extends \external_api {
             $me['time']['video'] + $me['time']['feedback'];
 
         // Store into return array.
-        $mediantimes[] = ['Type' => 'Navigation',
+        $times[] = ['Type' => 'Navigation',
             'Me' => calculation_helper::div($me['time']['core'], $summe),
             'Others' => calculation_helper::div($all['time']['core'], $sumall)];
-        $mediantimes[] = ['Type' => 'Forum',
+        $times[] = ['Type' => 'Forum',
             'Me' => calculation_helper::div($me['time']['forum'], $summe),
             'Others' => calculation_helper::div($all['time']['forum'], $sumall)];
-        $mediantimes[] = ['Type' => 'Grade',
+        $times[] = ['Type' => 'Grade',
             'Me' => calculation_helper::div($me['time']['grade'], $summe),
             'Others' => calculation_helper::div($all['time']['grade'], $sumall)];
-        $mediantimes[] = ['Type' => 'Submission',
+        $times[] = ['Type' => 'Submission',
             'Me' => calculation_helper::div($me['time']['submission'], $summe),
             'Others' => calculation_helper::div($all['time']['submission'], $sumall)];
-        $mediantimes[] = ['Type' => 'Resource',
+        $times[] = ['Type' => 'Resource',
             'Me' => calculation_helper::div($me['time']['resource'], $summe),
             'Others' => calculation_helper::div($all['time']['resource'], $sumall)];
-        $mediantimes[] = ['Type' => 'Quiz',
+        $times[] = ['Type' => 'Quiz',
             'Me' => calculation_helper::div($me['time']['quiz'], $summe),
             'Others' => calculation_helper::div($all['time']['quiz'], $sumall)];
-        $mediantimes[] = ['Type' => 'Video',
+        $times[] = ['Type' => 'Video',
             'Me' => calculation_helper::div($me['time']['video'], $summe),
             'Others' => calculation_helper::div($all['time']['video'], $sumall)];
 
         $customization = activity_helper::test_and_set_customization($courseid, $userid, true);
 
         return [
-            'Times' => $mediantimes,
+            'Times' => $times,
             'ShowOthers' => (bool)$customization->show_others,
         ];
     }

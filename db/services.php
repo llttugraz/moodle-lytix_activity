@@ -32,14 +32,14 @@ defined('MOODLE_INTERNAL') || die();
 // We defined the web service functions to install.
 $functions = array(
     'local_lytix_lytix_activity_logs_get' => array(
-        'classname'   => 'lytix_activity\\activity_graph_lib',
-        'methodname'  => 'activity_logs_get',
+        'classname'   => 'lytix_activity\\activity_lib',
+        'methodname'  => 'activity_get',
         'description' => 'Get the activity logs for activity graph',
         'type'        => 'read',
         'ajax'        => 'true'
     ),
     'local_lytix_lytix_activity_toggle_others' => array(
-        'classname'   => 'lytix_activity\\activity_graph_lib',
+        'classname'   => 'lytix_activity\\activity_lib',
         'methodname'  => 'activity_toggle_others',
         'description' => 'Toggles the ShowOthers flag',
         'type'        => 'write',

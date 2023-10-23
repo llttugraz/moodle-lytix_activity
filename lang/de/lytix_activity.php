@@ -27,11 +27,8 @@
 $string['pluginname'] = 'Lytix Activity';
 $string['privacy:metadata'] = 'This plugin does not store any data.';
 
-// Task.
-$string['cron_refresh_lytix_activity_cache'] = "Refresh caches for lytix subplugin activity basic";
-
 // Activity.
-$string['Activity_Graph'] = 'Aktivitätsgraph';
+$string['activity'] = 'Aktivitätsgraph';
 $string['error_text'] = '<div class="alert alert-danger">Etwas ist schiefgegangen, bitte Seite neu laden(F5). <br>
  Falls dieser Fehler dann noch immer passiert, wenden Sie sich bitte an Ihren Administrator.</div>';
 $string['overall_time'] = 'Gesamtzeit';
