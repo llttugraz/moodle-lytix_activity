@@ -107,12 +107,12 @@ class activity_lib_test extends externallib_advanced_testcase {
         external_api::clean_returnvalue(activity_lib::activity_get_returns(), $return);
 
         // Basic asserts.
-        $this::assertEquals(1, count($return));
+        $this::assertEquals(2, count($return));
 
-        $this->assertTrue(key_exists('Activities', $return));
+        $this->assertTrue(key_exists('Times', $return));
+        $this->assertTrue(key_exists('ShowOthers', $return));
 
         $this::assertEquals(7, count($return['Times']));
-        $this::assertEquals(1, count($return['ShowOthers']));
     }
 
     /**
