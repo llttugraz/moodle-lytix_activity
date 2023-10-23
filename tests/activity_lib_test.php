@@ -103,7 +103,7 @@ class activity_lib_test extends externallib_advanced_testcase {
      * @throws \restricted_context_exception
      */
     public function test_empty_activity() {
-        $return = activity_lib::activity_get($this->students[0], $this->context->id, $this->course->id);
+        $return = activity_lib::activity_get($this->students[0]->id, $this->course->id, $this->context->id);
         external_api::clean_returnvalue(activity_lib::activity_get_returns(), $return);
 
         // Basic asserts.
@@ -132,9 +132,11 @@ class activity_lib_test extends externallib_advanced_testcase {
         $today = new \DateTime('today midnight');
 
 
-        dummy::create_fake_data_for_course($date, $today, $this->students[0], $this->course->id, $this->context);
+        foreach ($this->students as $student) {
+            dummy::create_fake_data_for_course($date, $today, $student, $this->course->id, $this->context);
+        }
 
-        $result = activity_lib::activity_get($this->students[0]->id, $this->context->id, $this->course->id);
+        $result = activity_lib::activity_get($this->students[0]->id, $this->course->id, $this->context->id);
         external_api::clean_returnvalue(activity_lib::activity_get_returns(), $result);
 
         $this->assertTrue(key_exists('Times', $result));
