@@ -24,7 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->version   = 2023100300; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2023102300; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->requires = 2022112800.00; // Requires this Moodle version 4.1.
 $plugin->component    = 'lytix_activity'; // Full name of the plugin.
