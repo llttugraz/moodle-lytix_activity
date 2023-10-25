@@ -130,7 +130,7 @@ class activity_lib_test extends externallib_advanced_testcase {
     public function test_activity_get() {
         $date = new \DateTime('3 months ago');
         $today = new \DateTime('today midnight');
-        
+
         foreach ($this->students as $student) {
             dummy::create_fake_data_for_course($date, $today, $student, $this->course->id, $this->context);
         }
