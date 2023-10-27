@@ -28,7 +28,7 @@ $string['pluginname'] = 'Lytix Activity';
 $string['privacy:metadata'] = 'This plugin does not store any data.';
 
 // Activity.
-$string['activity'] = 'Aktivitätsgraph';
+$string['title'] = 'Aktivität';
 $string['show_others'] = 'andere Studierende';
 $string['core'] = 'im Kurs';
 $string['forum'] = 'Forum';
@@ -40,8 +40,7 @@ $string['video'] = 'Video';
 $string['bbb'] = 'BigBlueButton';
 $string['all'] = 'Alle';
 $string['nodata'] = 'zu wenig Daten vorhanden';
-$string['desc_me'] = 'Hier ist abgebildet, wie viel Zeit Sie durchschnittlich mit welchen Aktivitäten verbringen.';
-$string['desc_others'] = 'Das sind die durchschnittlichen Zeiten der anderen.';
+$string['desc'] = 'Hier ist abgebildet, wie viel Zeit durchschnittlich mit welchen Aktivitäten verbracht wurde.';
 
 // Privacy.
 $string['privacy:metadata:local_coursebackupexport'] = 'Um das Verhalten von Personen im Kurs zu überwachen,\

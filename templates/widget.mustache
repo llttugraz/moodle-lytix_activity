@@ -37,59 +37,23 @@
      "isstudent": true
   }
 }}
+<div id='activity' class='widget loading'>
+    <h3>{{#str}}title, lytix_activity{{/str}}</h3>
+    <div class='content p-3'>
+        <p class='font-italic'>{{#str}}desc, lytix_activity{{/str}}</p>
+        <h4 class='h6'>Your Own Activity</h4>
+        <div class='me'></div>
 
-<div id='activity' class='widget'>
-
-    <h4>{{#str}} title, lytix_activity {{/str}}</h4>
-
-    <div class='p-3'>
-        <form class='d-flex justify-content-between'>
-            <fieldset id='activity-chart-chooser' class='flex-shrink-1 mr-3'>
-                <label class='mb-0 mr-2'>
-                    <input id='show-bar-chart' type='radio' name='chart-type' value='bar-charts' checked>&nbsp;{{#str}} overall_time, lytix_activity {{/str}}
-                </label>
-                <label class='mb-0'>
-                    <input id='show-line-graph' type='radio' name='chart-type' value='line-graph'>&nbsp;{{#str}} time_per_day, lytix_activity {{/str}}
-                </label>
-            </fieldset>
-            <fieldset class='flex-shrink-0 text-right custom-control custom-switch'>
+        <div class='mt-3 mb-2 d-flex flex-wrap justify-content-between align-items-end'>
+            <h4 class='h6 mb-0'>Your Colleagues’ Activity</h4>
+            <div class='custom-control custom-switch'>
                 <input id='show-others' type='checkbox' class='custom-control-input'>
-                <label for='show-others' class='custom-control-label'>{{#str}} show_others, lytix_activity {{/str}}</label>
-            </fieldset>
-        </form>
-
-        <hr>
-
-        <div id='activity-line-graph' class='d-none'>
-            <p>
-                <select id="activitygraph_selectbox">
-                    <option value="_all">{{#str}} all, lytix_activity {{/str}}</option>
-                    <option value="_core">{{#str}} core, lytix_activity {{/str}}</option>
-                    <option value="_forum">{{#str}} forum, lytix_activity {{/str}}</option>
-                    <option value="_grade">{{#str}} grade, lytix_activity {{/str}}</option>
-                    <option value="_submission">{{#str}} submission, lytix_activity {{/str}}</option>
-                    <option value="_resource">{{#str}} resource, lytix_activity {{/str}}</option>
-                    <option value="_quiz">{{#str}} quiz, lytix_activity {{/str}}</option>
-                    <option value="_bbb">{{#str}} bbb, lytix_activity {{/str}}</option>
-                </select>
-            </p>
-
-            <div id="activitygraph_sum" class="text-right"></div>
-
-            <div id="activitygraph_widget"></div>
+                <label for='show-others' class='custom-control-label'>{{#str}}show_others, lytix_activity{{/str}}</label>
+            </div>
         </div>
-
-        <div id='activity-bar-charts'>
-            <div class='me'></div>
-            <div class='others mt-4 d-none'></div>
-        </div>
-
+        <div class='others'></div>
     </div>
-
 </div>
-
 {{#js}}
-    require(['lytix_activity/activity'], function(m) {
-        m.init({{contextid}}, {{courseid}}, {{userid}}, {{isstudent}});
-    });
+require(['lytix_activity/activity'], m => m.init({{contextid}}, {{courseid}}, {{userid}}, {{isstudent}}));
 {{/js}}

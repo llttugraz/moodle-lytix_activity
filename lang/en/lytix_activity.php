@@ -28,7 +28,7 @@ $string['pluginname'] = 'Lytix Activity';
 $string['privacy:metadata'] = 'This plugin does not store any data.';
 
 // Activity.
-$string['activity'] = 'Activity';
+$string['title'] = 'Activity';
 $string['show_others'] = 'Show Others';
 $string['core'] = 'Course';
 $string['forum'] = 'Forum';
@@ -40,8 +40,7 @@ $string['video'] = 'Video';
 $string['bbb'] = 'BigBlueButton';
 $string['all'] = 'All';
 $string['nodata'] = 'not enough data available';
-$string['desc_me'] = 'This shows the mean percentage of time you have spent on different activities.';
-$string['desc_others'] = 'Here you see how your colleagues have spent their time on average.';
+$string['desc'] = 'This shows the mean percentage of time spent on different activities.';
 
 // Privacy.
 $string['privacy:metadata:lytix_activity'] = 'In order to track all activities of the users , we\
