@@ -72,9 +72,6 @@ export const init = (contextid, courseid, userid) => {
 
     const
         widget = document.getElementById('activity'),
-        showOthersBox = document.getElementById('show-others'),
-        barChartMe = widget.querySelector('.me'),
-        barChartOthers = widget.querySelector('.others'),
         log = makeLoggingFunction(userid, courseid, contextid, 'activity');
 
     Promise.all([stringPromise, dataPromise]).then(values => {
@@ -86,10 +83,7 @@ export const init = (contextid, courseid, userid) => {
             rounder = new PercentRounder();
 
         const renderBarChart = target => {
-            const context = {
-                description: {text: strings['description' + target]},
-                data: [],
-            };
+            const context = [];
             for (let i = 0; i < length; ++i) {
                 const
                     entry = times[i],
@@ -97,50 +91,59 @@ export const init = (contextid, courseid, userid) => {
                 if (time <= 0) {
                     continue;
                 }
-                context.data.push({
+                context.push({
                     activity: entry.Type.toLowerCase(),
                     label: strings[entry.Type],
                     percent: rounder.round(time * 100),
                 });
             }
             rounder.reset();
-            if (context.data.length === 0) {
-                context.data.push({
+            if (context.length === 0) {
+                context.push({
                     label: strings.noData,
                     percent: 100,
                 });
             }
-            return Templates.render('lytix_activity/activity', context)
-            .then(html => {
-                widget.querySelector('.' + target.toLowerCase()).innerHTML = html;
-                return;
-            });
+            // We have to wrap this with an object because the template needs a way to narrow down the context.
+            // I realise that this explanation sound confusing, check out activity.mustache, that might help.
+            return {data: context};
         };
-        return Promise.all([
-            renderBarChart('Me'),
-            renderBarChart('Others')
-        ]);
+        console.debug({
+            me: renderBarChart('Me'),
+            others: renderBarChart('Others'),
+            showOthers: data.ShowOthers,
+        });
+        return Templates.render('lytix_activity/activity', {
+            me: renderBarChart('Me'),
+            others: renderBarChart('Others'),
+            showOthers: data.ShowOthers,
+        });
+    })
+    .then(html => {
+        widget.querySelector('.content').innerHTML = html;
+
+        // Set up controls for toggling others.
+        const barChartOthers = widget.querySelector('.others');
+        document.getElementById('show-others').addEventListener('change', e => {
+            const checked = e.target.checked;
+            Ajax.call([{
+                methodname: 'local_lytix_lytix_activity_toggle_others',
+                args: {userid, courseid, contextid, showothers: checked},
+            }]);
+            if (checked) {
+                barChartOthers.classList.remove('d-none');
+                log('SHOW', 'OTHERS');
+            } else {
+                barChartOthers.classList.add('d-none');
+                log('HIDE', 'OTHERS');
+            }
+        });
+        return;
     })
     .finally(() => {
         widget.classList.remove('loading');
     })
     .catch(() => {
         widget.innerHTML = strings.error_text; // eslint-disable-line camelcase
-    });
-
-    // Set up controls for toggling others.
-    showOthersBox.addEventListener('change', e => {
-        const checked = e.target.checked;
-        Ajax.call([{
-            methodname: 'local_lytix_lytix_activity_toggle_others',
-            args: {userid, courseid, contextid, showothers: checked},
-        }]);
-        if (checked) {
-            barChartOthers.classList.remove('d-none');
-            log('SHOW', 'OTHERS');
-        } else {
-            barChartOthers.classList.add('d-none');
-            log('HIDE', 'OTHERS');
-        }
     });
 };

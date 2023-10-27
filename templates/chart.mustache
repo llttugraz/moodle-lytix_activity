@@ -36,17 +36,16 @@
       "percent": "16%"
   }
 }}
-<p class='font-italic'>{{#str}}desc, lytix_activity{{/str}}</p>
-<h4 class='h6'>Your Own Activity</h4>
-<div class='me'>
-    {{#me}}{{> lytix_activity/chart}}{{/me}}
-</div>
-<h4 class='h6 mb-0 mt-3 d-flex flex-wrap justify-content-between align-items-end'>
-    <label for='show-others'>
-        Your Colleagues’ Activity
-        <input id='show-others' type='checkbox'{{#showOthers}} checked{{/showOthers}}>
-    </label>
-</h4>
-<div class='others mt-2{{^showOthers}} d-none{{/showOthers}}'>
-    {{#others}}{{> lytix_activity/chart}}{{/others}}
+<ul class='legend mb-1 d-flex flex-wrap justify-content-start p-0 list-unstyled'>
+    {{#data}}
+    <li class='{{{activity}}} mr-3'>
+        <span class='chart-label d-inline-block w-100'>{{{label}}}</span><br>
+        <span class='value'>{{{percent}}}&thinsp;%</span>
+    </li>
+    {{/data}}
+</ul>
+<div class='stacked-bar d-flex w-100 overflow-hidden'>
+    {{#data}}
+    <div title='{{{label}}}: {{{percent}}}&thinsp;%' class='bar {{{activity}}}' style='width: {{{percent}}}%;'></div>
+    {{/data}}
 </div>
