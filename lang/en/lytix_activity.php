@@ -29,7 +29,6 @@ $string['privacy:metadata'] = 'This plugin does not store any data.';
 
 // Activity.
 $string['activity'] = 'Activity';
->>>>>>> Stashed changes
 $string['show_others'] = 'Show Others';
 $string['core'] = 'Course';
 $string['forum'] = 'Forum';
