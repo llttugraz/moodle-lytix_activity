@@ -37,13 +37,13 @@
   }
 }}
 <p class='font-italic'>{{#str}}desc, lytix_activity{{/str}}</p>
-<h4 class='h6'>Your Own Activity</h4>
+<h4 class='h6'>{{#str}}own, lytix_activity{{/str}}</h4>
 <div class='me'>
     {{#me}}{{> lytix_activity/chart}}{{/me}}
 </div>
 <div class='toggle-container mt-3 mb-2 d-flex justify-content-between flex-wrap align-items-end'>
-    <h4 class='h6 mb-0'>Your Colleagues’ Activity</h4>
-    <label class='mb-0' for='show-others'>show&nbsp;<input id='show-others' type='checkbox'{{#showOthers}} checked{{/showOthers}}>
+    <h4 class='h6 mb-0'>{{#str}}others, lytix_activity{{/str}}</h4>
+    <label class='mb-0' for='show-others'>{{#str}}show, lytix_activity{{/str}}&nbsp;<input id='show-others' type='checkbox'{{#showOthers}} checked{{/showOthers}}>
     </label>
 </div>
 <div class='others{{^showOthers}} d-none{{/showOthers}}'>

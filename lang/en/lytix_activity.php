@@ -41,6 +41,9 @@ $string['bbb'] = 'BigBlueButton';
 $string['all'] = 'All';
 $string['nodata'] = 'not enough data available';
 $string['desc'] = 'This shows the mean percentage of time spent on different activities.';
+$string['own'] = 'Your Own Activity';
+$string['others'] = 'Your Colleagues’ Activity';
+$string['show'] = 'show';
 
 // Privacy.
 $string['privacy:metadata:lytix_activity'] = 'In order to track all activities of the users , we\

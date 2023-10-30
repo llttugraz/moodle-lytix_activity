@@ -41,6 +41,9 @@ $string['bbb'] = 'BigBlueButton';
 $string['all'] = 'Alle';
 $string['nodata'] = 'zu wenig Daten vorhanden';
 $string['desc'] = 'Hier ist abgebildet, wie viel Zeit durchschnittlich mit welchen Aktivitäten verbracht wurde.';
+$string['own'] = 'Eigene Aktivität';
+$string['others'] = 'Aktivität anderer Teilnehmenden';
+$string['show'] = 'anzeigen';
 
 // Privacy.
 $string['privacy:metadata:local_coursebackupexport'] = 'Um das Verhalten von Personen im Kurs zu überwachen,\
