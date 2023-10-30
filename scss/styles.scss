@@ -1,0 +1,42 @@
+@use '../../../scss/colors' as *;
+
+#activity {
+    h4,
+    .toggle-container {
+        border-bottom: 1px solid lightgrey;
+        line-height: 1.2; // This is already set on h4 but is also needed for the label.
+    }
+
+    .stacked-bar {
+        min-height: 2em;
+        border-radius: 3px;
+    }
+
+    .chart-label {
+        border-bottom: 4px solid lightgrey;
+    }
+
+    .bar {
+        background-color: lightgrey;
+    }
+
+    $activity-colors: (
+        'forum': $orange,
+        'navigation': $violet,
+        'quiz': $pink,
+        'video': $cyan,
+        'grade': $blue,
+        'resource': $green,
+        'submission': $yellow,
+        'feedback': $purpure,
+    );
+
+    @each $name, $color in $activity-colors {
+        .#{$name} .chart-label {
+            border-bottom-color: $color;
+        }
+        .bar.#{$name} {
+            background-color: $color;
+        }
+    }
+}
