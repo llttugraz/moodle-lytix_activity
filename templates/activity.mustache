@@ -40,6 +40,7 @@
 <h4 class='h6'>{{#str}}own, lytix_activity{{/str}}</h4>
 <div class='me'>
     {{#me}}{{> lytix_activity/chart}}{{/me}}
+    {{^me}}<p class='text-center font-italic'>{{#str}}nodata, lytix_activity{{/str}}</p>{{/me}}
 </div>
 <div class='toggle-container mt-3 mb-2 d-flex justify-content-between flex-wrap align-items-end'>
     <h4 class='h6 mb-0'>{{#str}}others, lytix_activity{{/str}}</h4>
@@ -48,4 +49,5 @@
 </div>
 <div class='others{{^showOthers}} d-none{{/showOthers}}'>
     {{#others}}{{> lytix_activity/chart}}{{/others}}
+    {{^others}}<p class='text-center font-italic'>{{#str}}nodata, lytix_activity{{/str}}</p>{{/others}}
 </div>
