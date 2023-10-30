@@ -39,6 +39,7 @@ use lytix_helper\dummy;
 /**
  * Class activity_lib_test.
  * @coversDefaultClass  \lytix_activity\activity_lib
+ * @runTestsInSeparateProcesses
  * @group learners_corner
  */
 class activity_lib_test extends externallib_advanced_testcase {
