@@ -41,12 +41,11 @@
 <div class='me'>
     {{#me}}{{> lytix_activity/chart}}{{/me}}
 </div>
-<h4 class='h6 mb-0 mt-3 d-flex flex-wrap justify-content-between align-items-end'>
-    <label for='show-others'>
-        Your Colleagues’ Activity
-        <input id='show-others' type='checkbox'{{#showOthers}} checked{{/showOthers}}>
+<div class='toggle-container mt-3 mb-2 d-flex justify-content-between flex-wrap align-items-end'>
+    <h4 class='h6 mb-0'>Your Colleagues’ Activity</h4>
+    <label class='mb-0' for='show-others'>show&nbsp;<input id='show-others' type='checkbox'{{#showOthers}} checked{{/showOthers}}>
     </label>
-</h4>
-<div class='others mt-2{{^showOthers}} d-none{{/showOthers}}'>
+</div>
+<div class='others{{^showOthers}} d-none{{/showOthers}}'>
     {{#others}}{{> lytix_activity/chart}}{{/others}}
 </div>
