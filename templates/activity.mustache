@@ -1,0 +1,53 @@
+{{!
+  This file is part of Moodle - http://moodle.org/
+
+  Moodle is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Moodle is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+  @template lytix_timeoverview/timeoverview
+
+  Lytix timeoverview widget.
+
+  The purpose of this template is to render a overview of the activities of the students.
+
+  Classes required for JS:
+  * lytix_activity/activity
+
+  Data attributes required for JS:
+  * none
+
+  Context variables required for this template:
+  * none
+
+  Example context (json):
+  {
+      "activity": "Quiz",
+      "percent": "16%"
+  }
+}}
+<p class='font-italic'>{{#str}}desc, lytix_activity{{/str}}</p>
+<h4 class='h6'>{{#str}}own, lytix_activity{{/str}}</h4>
+<div class='me'>
+    {{#me}}{{> lytix_activity/chart}}{{/me}}
+    {{^me}}<p class='text-center font-italic'>{{#str}}nodata, lytix_activity{{/str}}</p>{{/me}}
+</div>
+<div class='toggle-container mt-3 mb-2 d-flex justify-content-between flex-wrap align-items-end'>
+    <h4 class='h6 mb-0'>{{#str}}others, lytix_activity{{/str}}</h4>
+    <label class='mb-0' for='show-others'>{{#str}}show, lytix_activity{{/str}}&nbsp;<input id='show-others' type='checkbox'{{#showOthers}} checked{{/showOthers}}>
+    </label>
+</div>
+<div class='others{{^showOthers}} d-none{{/showOthers}}'>
+    {{#others}}{{> lytix_activity/chart}}{{/others}}
+    {{^others}}<p class='text-center font-italic'>{{#str}}nodata, lytix_activity{{/str}}</p>{{/others}}
+</div>

@@ -1,8 +1,83 @@
-#activity .y-axis line {
-    opacity: 0.2;
+#activity p + h4,
+#activity .toggle-container {
+    border-bottom: 1px solid lightgrey;
+    line-height: 1.2;
 }
 
-#activity .y-axis path {
-    display: none;
+#activity .stacked-bar {
+    min-height: 2em;
+    border-radius: 3px;
+}
+
+#activity .chart-label {
+    border-bottom: 4px solid lightgrey;
+}
+
+#activity .bar {
+    background-color: lightgrey;
+}
+
+#activity .forum .chart-label {
+    border-bottom-color: #f07b41;
+}
+
+#activity .bar.forum {
+    background-color: #f07b41;
+}
+
+#activity .navigation .chart-label {
+    border-bottom-color: #8044bb;
+}
+
+#activity .bar.navigation {
+    background-color: #8044bb;
+}
+
+#activity .quiz .chart-label {
+    border-bottom-color: #b740bf;
+}
+
+#activity .bar.quiz {
+    background-color: #b740bf;
+}
+
+#activity .video .chart-label {
+    border-bottom-color: #17a2b8;
+}
+
+#activity .bar.video {
+    background-color: #17a2b8;
+}
+
+#activity .grade .chart-label {
+    border-bottom-color: #2e67b8;
+}
+
+#activity .bar.grade {
+    background-color: #2e67b8;
+}
+
+#activity .resource .chart-label {
+    border-bottom-color: #a3c440;
+}
+
+#activity .bar.resource {
+    background-color: #a3c440;
+}
+
+#activity .submission .chart-label {
+    border-bottom-color: #fad305;
+}
+
+#activity .bar.submission {
+    background-color: #fad305;
+}
+
+#activity .feedback .chart-label {
+    border-bottom-color: #d13370;
+}
+
+#activity .bar.feedback {
+    background-color: #d13370;
 }
 
