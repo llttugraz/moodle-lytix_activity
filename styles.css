@@ -1,4 +1,4 @@
-#activity h4,
+#activity p + h4,
 #activity .toggle-container {
     border-bottom: 1px solid lightgrey;
     line-height: 1.2;
