@@ -38,9 +38,9 @@ use lytix_helper\dummy;
 
 /**
  * Class activity_lib_test.
- * @coversDefaultClass  \lytix_activity\activity_lib
+ *
  * @runTestsInSeparateProcesses
- * @group learners_corner
+ * @coversDefaultClass  \lytix_activity\activity_lib
  */
 class activity_lib_test extends externallib_advanced_testcase {
     /**
@@ -94,7 +94,7 @@ class activity_lib_test extends externallib_advanced_testcase {
 
     /**
      * Tests timeoverview webservice.
-     * @runInSeparateProcess
+     *
      * @covers ::activity_get
      * @covers ::activity_get_returns
      * @covers ::activity_get_parameters
@@ -119,7 +119,7 @@ class activity_lib_test extends externallib_advanced_testcase {
 
     /**
      * Create activites and check timeoverview webservice.
-     * @runInSeparateProcess
+     *
      * @covers ::activity_get
      * @covers ::activity_get_returns
      * @covers ::activity_get_parameters
