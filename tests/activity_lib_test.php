@@ -27,8 +27,6 @@ namespace lytix_activity;
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
 use external_api;
 use externallib_advanced_testcase;
 use lytix_helper\dummy;
@@ -39,7 +37,7 @@ use lytix_helper\dummy;
  * @runTestsInSeparateProcesses
  * @coversDefaultClass  \lytix_activity\activity_lib
  */
-class activity_lib_test extends externallib_advanced_testcase {
+class activity_lib_test extends \externallib_advanced_testcase {
     /**
      * Variable for course.
      *
