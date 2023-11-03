@@ -29,9 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot . '/webservice/tests/helpers.php');
-require_once($CFG->libdir . "/externallib.php");
-
 use external_api;
 use externallib_advanced_testcase;
 use lytix_helper\dummy;
@@ -70,6 +67,10 @@ class activity_lib_test extends externallib_advanced_testcase {
     public function setUp(): void {
         $this->resetAfterTest(true);
         $this->setAdminUser();
+        global $CFG;
+
+        require_once($CFG->dirroot . '/webservice/tests/helpers.php');
+        require_once($CFG->libdir . "/externallib.php");
 
         $course            = new \stdClass();
         $course->fullname  = 'Test Course';
