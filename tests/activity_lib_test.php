@@ -25,10 +25,7 @@
 
 namespace lytix_activity;
 
-defined('MOODLE_INTERNAL') || die();
-
 use external_api;
-use externallib_advanced_testcase;
 use lytix_helper\dummy;
 
 /**
@@ -63,7 +60,7 @@ class activity_lib_test extends \externallib_advanced_testcase {
      * Setup called before any test case.
      */
     public function setUp(): void {
-        $this->resetAfterTest(true);
+        $this->resetAfterTest();
         $this->setAdminUser();
         global $CFG;
 
