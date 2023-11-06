@@ -70,8 +70,8 @@ class activity_lib extends \external_api {
                             'Others' => new \external_value(PARAM_FLOAT,
                                 'Duration of time spend for this target (median) (Others)',
                                 VALUE_REQUIRED),
-                        ], 'desc', false
-                    )
+                        ], 'desc', VALUE_OPTIONAL
+                    ), 'desc', VALUE_OPTIONAL
                 ),
                 'ShowOthers' => new \external_value(PARAM_BOOL, 'Show the times of other students', VALUE_REQUIRED),
             ]
