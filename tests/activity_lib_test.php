@@ -25,8 +25,14 @@
 
 namespace lytix_activity;
 
+defined('MOODLE_INTERNAL') || die();
+
 use external_api;
+use externallib_advanced_testcase;
 use lytix_helper\dummy;
+
+global $CFG;
+require_once("{$CFG->dirroot}/webservice/tests/helpers.php");
 
 /**
  * Class activity_lib_test.
@@ -34,7 +40,7 @@ use lytix_helper\dummy;
  * @runTestsInSeparateProcesses
  * @coversDefaultClass  \lytix_activity\activity_lib
  */
-class activity_lib_test extends \externallib_advanced_testcase {
+class activity_lib_test extends externallib_advanced_testcase {
     /**
      * Variable for course.
      *
@@ -64,8 +70,7 @@ class activity_lib_test extends \externallib_advanced_testcase {
         $this->setAdminUser();
         global $CFG;
 
-        require_once($CFG->dirroot . '/webservice/tests/helpers.php');
-        require_once($CFG->libdir . "/externallib.php");
+        require_once("{$CFG->libdir}/externallib.php");
 
         $course            = new \stdClass();
         $course->fullname  = 'Test Course';
