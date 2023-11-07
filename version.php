@@ -35,5 +35,5 @@ $plugin->dependencies = [
     'lytix_planner'         => ANY_VERSION,
     'lytix_timeoverview'    => ANY_VERSION
 ];
-$plugin->release   = 'v1.0.6';
+$plugin->release   = 'v1.0.7';
 $plugin->supported = [401, 403];
