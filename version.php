@@ -36,4 +36,4 @@ $plugin->dependencies = [
     'lytix_timeoverview'    => ANY_VERSION
 ];
 $plugin->release   = 'v1.0.6';
-$plugin->supported = [401, 401];
+$plugin->supported = [401, 403];
