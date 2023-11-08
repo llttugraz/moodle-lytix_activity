@@ -31,9 +31,7 @@ $plugin->component    = 'lytix_activity'; // Full name of the plugin.
 $plugin->dependencies = [
     'lytix_helper'          => ANY_VERSION,
     'lytix_logs'            => ANY_VERSION,
-    'lytix_config'          => ANY_VERSION,
-    'lytix_planner'         => ANY_VERSION,
-    'lytix_timeoverview'    => ANY_VERSION
+    'lytix_config'          => ANY_VERSION
 ];
-$plugin->release   = 'v1.0.7';
+$plugin->release   = 'v1.0.8';
 $plugin->supported = [401, 403];
