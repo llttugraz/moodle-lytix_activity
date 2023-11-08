@@ -29,7 +29,11 @@
 
 namespace lytix_activity;
 
-use context_course;
+defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
+require_once("{$CFG->libdir}/externallib.php");
+
 use lytix_helper\calculation_helper;
 use lytix_helper\course_settings;
 
