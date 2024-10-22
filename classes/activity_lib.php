@@ -98,7 +98,7 @@ class activity_lib extends \external_api {
         $params  = self::validate_parameters(self::activity_get_parameters(), [
             'userid' => $userid,
             'courseid' => $courseid,
-            'contextid' => $contextid
+            'contextid' => $contextid,
         ]);
 
         // We always must call validate_context in a webservice.
@@ -204,7 +204,7 @@ class activity_lib extends \external_api {
             'userid' => $userid,
             'courseid' => $courseid,
             'contextid' => $contextid,
-            'showothers' => $showothers
+            'showothers' => $showothers,
         ]);
 
         // We always must call validate_context in a webservice.

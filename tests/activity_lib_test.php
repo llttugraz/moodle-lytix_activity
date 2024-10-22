@@ -40,7 +40,7 @@ require_once("{$CFG->dirroot}/webservice/tests/helpers.php");
  * @runTestsInSeparateProcesses
  * @coversDefaultClass  \lytix_activity\activity_lib
  */
-class activity_lib_test extends externallib_advanced_testcase {
+final class activity_lib_test extends externallib_advanced_testcase {
     /**
      * Variable for course.
      *
@@ -66,6 +66,7 @@ class activity_lib_test extends externallib_advanced_testcase {
      * Setup called before any test case.
      */
     public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
         global $CFG;
@@ -105,7 +106,7 @@ class activity_lib_test extends externallib_advanced_testcase {
      * @throws \invalid_parameter_exception
      * @throws \restricted_context_exception
      */
-    public function test_empty_activity() {
+    public function test_empty_activity(): void {
         $return = activity_lib::activity_get($this->students[0]->id, $this->course->id, $this->context->id);
         external_api::clean_returnvalue(activity_lib::activity_get_returns(), $return);
 
@@ -131,7 +132,7 @@ class activity_lib_test extends externallib_advanced_testcase {
      * @throws \invalid_response_exception
      * @throws \restricted_context_exception
      */
-    public function test_activity_get() {
+    public function test_activity_get(): void {
         $date = new \DateTime('3 months ago');
         $today = new \DateTime('today midnight');
 

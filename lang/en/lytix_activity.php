@@ -24,33 +24,29 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Lytix Activity';
-$string['privacy:metadata'] = 'This plugin does not store any data.';
-
-// Activity.
-$string['title'] = 'Activity';
-$string['show_others'] = 'Show Others';
+$string['all'] = 'All';
+$string['bbb'] = 'BigBlueButton';
 $string['core'] = 'Course';
+$string['desc'] = 'This shows the mean percentage of time spent on different activities.';
 $string['forum'] = 'Forum';
 $string['grade'] = 'Grade';
-$string['submission'] = 'Submission';
-$string['resource'] = 'Resource';
-$string['quiz'] = 'Quiz';
-$string['video'] = 'Video';
-$string['bbb'] = 'BigBlueButton';
-$string['all'] = 'All';
 $string['nodata'] = 'not enough data available';
-$string['desc'] = 'This shows the mean percentage of time spent on different activities.';
-$string['own'] = 'Your Own Activity';
 $string['others'] = 'Your Colleagues’ Activity';
-$string['show'] = 'show';
-
-// Privacy.
+$string['own'] = 'Your Own Activity';
+$string['pluginname'] = 'Lytix Activity';
+$string['privacy:metadata'] = 'This plugin does not store any data.';
 $string['privacy:metadata:lytix_activity'] = 'In order to track all activities of the users , we\
  need to save some user related data';
 $string['privacy:metadata:lytix_activity:courseid'] = 'The course ID will be saved for knowing to which course the\
  data belongs to';
-$string['privacy:metadata:lytix_activity:userid'] = 'The user ID will be saved for uniquely identifying the user';
+$string['privacy:metadata:lytix_activity:future'] = 'This value is a placeholder for future values';
 $string['privacy:metadata:lytix_activity:show_others'] = 'The option to show the median of other users in the course\
  is saved here';
-$string['privacy:metadata:lytix_activity:future'] = 'This value is a placeholder for future values';
+$string['privacy:metadata:lytix_activity:userid'] = 'The user ID will be saved for uniquely identifying the user';
+$string['quiz'] = 'Quiz';
+$string['resource'] = 'Resource';
+$string['show'] = 'show';
+$string['show_others'] = 'Show Others';
+$string['submission'] = 'Submission';
+$string['title'] = 'Activity';
+$string['video'] = 'Video';
