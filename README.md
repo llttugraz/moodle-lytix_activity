@@ -14,7 +14,7 @@ Students can view their own and of their collegues time spent in a bar chart.
 ## Requirements
 
 - Supported Moodle Version: 4.1 - 4.5
-- Supported PHP Version:    7.4 - 8.2
+- Supported PHP Version:    7.4 - 8.3
 - Supported Databases:      MariaDB, PostgreSQL
 - Supported Moodle Themes:  Boost
 
