@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Choose and download exam backups
  *
@@ -29,7 +30,7 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\tests\request\content_writer;
-use \core_privacy\local\request\writer;
+use core_privacy\local\request\writer;
 
 
 /**
@@ -47,14 +48,14 @@ class provider implements
      * @param collection $collection empty collection of tables for column translation
      * @return  collection the translated userdata
      */
-    public static function get_metadata(collection $collection) : collection {
+    public static function get_metadata(collection $collection): collection {
 
         $collection->add_database_table("lytix_activity",
             [
                 "userid" => "privacy:metadata:lytix_activity:userid",
                 "courseid" => "privacy:metadata:lytix_activity:courseid",
                 "show_others" => "privacy:metadata:lytix_activity:show_others",
-                "future" => "privacy:metadata:lytix_activity:future"
+                "future" => "privacy:metadata:lytix_activity:future",
             ], "privacy:metadata:lytix_activity"
         );
 
@@ -126,7 +127,7 @@ class provider implements
         // This CONTEXT_SYSTEM could be $userlist->contextid or just CONTEXT_COURSE.
         $params = [
             "contextlevel" => CONTEXT_COURSE,
-            "userid" => $contextlist->get_user()->id
+            "userid" => $contextlist->get_user()->id,
         ];
         $dataset = $DB->get_records_sql($coursebackupids, $params);
 
@@ -152,13 +153,13 @@ class provider implements
 
         $params = [
             "contextlevel" => CONTEXT_SYSTEM,
-            "userid" => $userid
+            "userid" => $userid,
         ];
         $contextlist->add_from_sql($roleassignments, $params);
 
         $params = [
             "contextlevel" => CONTEXT_COURSE,
-            "userid" => $userid
+            "userid" => $userid,
         ];
         $contextlist->add_from_sql($roleassignments, $params);
 

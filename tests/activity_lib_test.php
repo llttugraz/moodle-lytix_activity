@@ -40,7 +40,7 @@ require_once("{$CFG->dirroot}/webservice/tests/helpers.php");
  * @runTestsInSeparateProcesses
  * @coversDefaultClass  \lytix_activity\activity_lib
  */
-class activity_lib_test extends externallib_advanced_testcase {
+final class activity_lib_test extends externallib_advanced_testcase {
     /**
      * Variable for course.
      *
@@ -66,6 +66,7 @@ class activity_lib_test extends externallib_advanced_testcase {
      * Setup called before any test case.
      */
     public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
         global $CFG;
@@ -105,7 +106,8 @@ class activity_lib_test extends externallib_advanced_testcase {
      * @throws \invalid_parameter_exception
      * @throws \restricted_context_exception
      */
-    public function test_empty_activity() {
+    public function test_empty_activity(): void {
+        global $DB;
         $return = activity_lib::activity_get($this->students[0]->id, $this->course->id, $this->context->id);
         external_api::clean_returnvalue(activity_lib::activity_get_returns(), $return);
 
@@ -116,6 +118,11 @@ class activity_lib_test extends externallib_advanced_testcase {
         $this->assertTrue(key_exists('ShowOthers', $return));
 
         $this::assertEquals(7, count($return['Times']));
+
+        // Update 2024-11-05: This test is extended for cleanup (implemented in local_lytix).
+        $this::assertEquals(1, $DB->count_records('lytix_activity_customization'));
+        delete_user($this->students[0], false);
+        $this::assertEquals(0, $DB->count_records('lytix_activity_customization'));
     }
 
     /**
@@ -131,7 +138,8 @@ class activity_lib_test extends externallib_advanced_testcase {
      * @throws \invalid_response_exception
      * @throws \restricted_context_exception
      */
-    public function test_activity_get() {
+    public function test_activity_get(): void {
+        global $DB;
         $date = new \DateTime('3 months ago');
         $today = new \DateTime('today midnight');
 
@@ -152,5 +160,11 @@ class activity_lib_test extends externallib_advanced_testcase {
         // Sum should always be equal to 1.
         $this::assertEquals(1, round($summe));
         $this::assertEquals(1, round($sumothers));
+
+        // Update 2024-11-05: This test is extended for cleanup (implemented in local_lytix).
+        $this::assertEquals(1, $DB->count_records('lytix_activity_customization'));
+        delete_course($this->course->id, false);
+        $this::assertEquals(0, $DB->count_records('lytix_activity_customization'));
+
     }
 }

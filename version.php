@@ -24,14 +24,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->version   = 2023102300; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2024110801; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->requires = 2022112800.00; // Requires this Moodle version 4.1.
 $plugin->component    = 'lytix_activity'; // Full name of the plugin.
 $plugin->dependencies = [
     'lytix_helper'          => ANY_VERSION,
     'lytix_logs'            => ANY_VERSION,
-    'lytix_config'          => ANY_VERSION
 ];
-$plugin->release   = 'v1.0.8';
-$plugin->supported = [401, 403];
+$plugin->release   = 'v1.0.9';
+$plugin->supported = [401, 405];

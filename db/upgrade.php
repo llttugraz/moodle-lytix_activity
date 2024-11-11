@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Upgrade changes between versions
  *
@@ -36,5 +37,20 @@ function xmldb_lytix_activity_upgrade($oldversion) {
         // Basic savepoint reached.
         upgrade_plugin_savepoint(true, 2022092100, 'lytix', 'activity');
     }
+
+    if ($oldversion < 2024110801) {
+        global $DB;
+        // Delete deleted users from table 'lytix_activity_customization'.
+        $DB->delete_records_select('lytix_activity_customization',
+                'userid IN (SELECT id FROM  {user} WHERE deleted = 1)');
+
+        // Delete non-existing courses from table 'lytix_activity_customization'.
+        $DB->delete_records_select('lytix_activity_customization',
+                'courseid NOT IN (SELECT id FROM  {course})');
+
+        // Coursepolicy savepoint reached.
+        upgrade_plugin_savepoint(true, 2024110801, 'lytix', 'activity');
+    }
+
     return true;
 }

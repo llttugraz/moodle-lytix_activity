@@ -24,34 +24,30 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Lytix Activity';
-$string['privacy:metadata'] = 'This plugin does not store any data.';
-
-// Activity.
-$string['title'] = 'Aktivität';
-$string['show_others'] = 'andere Studierende';
+$string['all'] = 'Alle';
+$string['bbb'] = 'BigBlueButton';
 $string['core'] = 'im Kurs';
+$string['desc'] = 'Hier ist abgebildet, wie viel Zeit durchschnittlich mit welchen Aktivitäten verbracht wurde.';
 $string['forum'] = 'Forum';
 $string['grade'] = 'Note';
-$string['submission'] = 'Aufgabe';
-$string['resource'] = 'Ressource';
-$string['quiz'] = 'Quiz';
-$string['video'] = 'Video';
-$string['bbb'] = 'BigBlueButton';
-$string['all'] = 'Alle';
 $string['nodata'] = 'zu wenig Daten vorhanden';
-$string['desc'] = 'Hier ist abgebildet, wie viel Zeit durchschnittlich mit welchen Aktivitäten verbracht wurde.';
-$string['own'] = 'Eigene Aktivität';
 $string['others'] = 'Aktivität anderer Teilnehmenden';
-$string['show'] = 'anzeigen';
-
-// Privacy.
+$string['own'] = 'Eigene Aktivität';
+$string['pluginname'] = 'Lytix Activity';
+$string['privacy:metadata'] = 'This plugin does not store any data.';
 $string['privacy:metadata:local_coursebackupexport'] = 'Um das Verhalten von Personen im Kurs zu überwachen,\
  müssen etliche Benutzerdaten gespeichert werden';
 $string['privacy:metadata:local_coursebackupexport:courseid'] = 'Die Kursnummer wird gespeichert, um nachvollziehen\
  zu können, von welchem Kurs die Daten erhoben wurden';
 $string['privacy:metadata:local_coursebackupexport:userid'] = 'Die Benutzernummer wird gespeichert, um die Person,\
  die den Kurs besucht hat, identifizieren zu können';
+$string['privacy:metadata:lytix_activity:future'] = 'Dieses Feld ist ein Platzhalter für mögliche neue Werte';
 $string['privacy:metadata:lytix_activity:show_others'] = 'Option um die Aktivitäten der andren Kursteilnehmer sehen\
  zu können wird hier gespeichert';
-$string['privacy:metadata:lytix_activity:future'] = 'Dieses Feld ist ein Platzhalter für mögliche neue Werte';
+$string['quiz'] = 'Quiz';
+$string['resource'] = 'Ressource';
+$string['show'] = 'anzeigen';
+$string['show_others'] = 'andere Studierende';
+$string['submission'] = 'Aufgabe';
+$string['title'] = 'Aktivität';
+$string['video'] = 'Video';
